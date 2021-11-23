@@ -1,6 +1,9 @@
-package forums
+package data
 
-import "fmt"
+import (
+	"database/sql"
+	"fmt"
+)
 
 type Forum struct {
 	TopicKeyword string
@@ -14,6 +17,7 @@ type User struct {
 }
 
 type Repository struct {
+	Db *sql.DB
 }
 
 func (r *Repository) GetForumsList() ([]*Forum, error) {
