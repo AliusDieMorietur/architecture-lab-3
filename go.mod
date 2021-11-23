@@ -1,4 +1,4 @@
-module TooHard
+module SamuraiLab3
 
 go 1.17
 
