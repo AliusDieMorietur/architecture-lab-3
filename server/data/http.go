@@ -22,7 +22,7 @@ func HttpHandler(repository *Repository) http.HandlerFunc {
 func handleAddUser(r *http.Request, rw http.ResponseWriter, repository *Repository) {
 	fmt.Println("handleAddUser invoke")
 	// Достать из r.Body шнягу
-	var user = User{}
+	var user = User{Name: "NewUserTest", Interests: []string{"Kek"}}
 	repository.AddUser(user)
 }
 
