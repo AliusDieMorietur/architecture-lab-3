@@ -2,7 +2,6 @@ package data
 
 import (
 	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/google/wire"
@@ -24,7 +23,8 @@ func ProvideDbConnection() (*sql.DB, error) {
 	// 	DisableSSL: true,
 	// }
 	// return conn.Open()
-	return nil, errors.New("DB: Not Implemented")
+	// return nil, errors.New("DB: Not Implemented")
+	return nil, nil
 }
 
 var Providers = wire.NewSet(ProvideRepository, ProvideHttpHandler, ProvideDbConnection)
