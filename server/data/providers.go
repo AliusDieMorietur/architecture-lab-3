@@ -2,13 +2,14 @@ package data
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 
 	"github.com/google/wire"
 )
 
 func ProvideRepository(db *sql.DB) *Repository {
-	return &Repository{Db: db}
+	return &Repository{ Db: db }
 }
 
 func ProvideHttpHandler(repository *Repository) http.HandlerFunc {
@@ -16,15 +17,13 @@ func ProvideHttpHandler(repository *Repository) http.HandlerFunc {
 }
 
 func ProvideDbConnection() (*sql.DB, error) {
-	// conn := &db.Connection{
-	// 	DbName:     "chat-example",
-	// 	User:       "roman",
-	// 	Host:       "localhost",
-	// 	DisableSSL: true,
-	// }
-	// return conn.Open()
+	db, err := sql.Open("postgres", "postgres://postgres:postgres@localhost/forum?sslmode=disable")
+	if err != nil {
+		log.Fatal(err)
+		db.Close()
+	}
+	return db, err
 	// return nil, errors.New("DB: Not Implemented")
-	return nil, nil
 }
 
 var Providers = wire.NewSet(ProvideRepository, ProvideHttpHandler, ProvideDbConnection)
