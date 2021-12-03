@@ -20,6 +20,7 @@ func ProvideDbConnection() (*sql.DB, error) {
 	conn := &db.Connection{
 		DbName:     "forum",
 		User:       "postgres",
+		Password:   "postgres",
 		Host:       "localhost",
 		DisableSSL: true,
 	}
