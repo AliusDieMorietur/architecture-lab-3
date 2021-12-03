@@ -19,7 +19,7 @@ client
 
 // Scenario 2: Register new user.
 client
-  .registerUser("my-new-user", ["SuckLover"])
+  .registerUser("my-new-user", ["cartoons"])
   .then((resp) => {
     console.log("=== Scenario 2 ===");
     console.log("Register user response:", resp);

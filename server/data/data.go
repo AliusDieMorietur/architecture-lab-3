@@ -9,14 +9,14 @@ import (
 )
 
 type Forum struct {
-	Id 					 int64
+	Id           int64
 	Name         string
 	TopicKeyword string
 	Users        []string
 }
 
 type User struct {
-	Id 				int64
+	Id        int64
 	Name      string
 	Interests []string
 }
@@ -27,7 +27,7 @@ type Repository struct {
 
 func (r *Repository) GetForumsList() ([]*Forum, error) {
 	fmt.Printf("Get forums list")
-	rows, err :=  r.Db.Query(`
+	rows, err := r.Db.Query(`
 		SELECT 
 			f.*,
 			(
@@ -62,11 +62,34 @@ func (r *Repository) GetForumsList() ([]*Forum, error) {
 
 func (r *Repository) AddUser(user User) {
 	fmt.Printf("Add User")
-	rows, err :=  r.Db.Query(`
-		INSERT INTO "User" ("name") VALUES ($1)
+	rows, err := r.Db.Query(`
+		INSERT INTO "User" ("name") VALUES ($1) RETURNING "id"
 	`, user.Name)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err.Error())
+	}
+	if rows.Next() {
+		var id int
+		if err := rows.Scan(&id); err != nil {
+			log.Println(err.Error())
+		}
+		rows, err = r.Db.Query(`
+			INSERT INTO "UserForum" 
+			("userId", "forumId") 
+			SELECT *
+			FROM (SELECT
+				$1::bigint as "userId", 
+				(
+						SELECT "id" 
+						FROM "Forum"
+						WHERE "topicKeyword" = ANY($2)
+				) as "forumId"
+			) x
+			WHERE "forumId" IS NOT NULL
+		`, id, pq.Array(user.Interests))
+		if err != nil {
+			log.Println(err.Error())
+		}
 	}
 	defer rows.Close()
 }

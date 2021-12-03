@@ -2,6 +2,7 @@ package data
 
 import (
 	"SamuraiLab3/server/tools"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,7 +23,14 @@ func HttpHandler(repository *Repository) http.HandlerFunc {
 func handleAddUser(r *http.Request, rw http.ResponseWriter, repository *Repository) {
 	fmt.Println("handleAddUser invoke")
 	// Достать из r.Body шнягу
-	var user = User{Name: "NewUserTest", Interests: []string{"Kek"}}
+	var user User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		log.Printf("Error decoding channel input: %s", err)
+		tools.WriteJsonBadRequest(rw, "bad JSON payload")
+		return
+	}
+	tools.WriteJsonOk(rw, &user)
+
 	repository.AddUser(user)
 }
 
