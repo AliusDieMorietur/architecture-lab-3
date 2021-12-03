@@ -24,7 +24,6 @@ ALTER TABLE "UserForum" ADD CONSTRAINT "pkUserForum" PRIMARY KEY ("userId", "for
 ALTER TABLE "UserForum" ADD CONSTRAINT "fkUserForumUser" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE;
 ALTER TABLE "UserForum" ADD CONSTRAINT "fkUserForumForum" FOREIGN KEY ("forumId") REFERENCES "Forum" ("id") ON DELETE CASCADE;
 
-
 INSERT INTO "User" (
   "name"
 ) VALUES (
@@ -33,27 +32,23 @@ INSERT INTO "User" (
   'Roma'
 ),(
   'Ilja'
-),(
-  'KekChel'
 );
-
 
 INSERT INTO "Forum" (
   "name",
   "topicKeyword"
 ) VALUES (
-  'Trap Lovers',
-  'Astolfo'
+  "Anime",
+  "anime"
+), (
+  "Cartoons",
+  "cartoons"
+), (
+  "Squid Game"
+  "squid_game"
 );
 
 INSERT INTO "UserForum" (
   "userId",
   "forumId"
-) SELECT 
-  "id" as "userId", 
-  (
-    SELECT "id" 
-    FROM "Forum" 
-    LIMIT 1
-  ) as "forumId" 
-FROM "User";
+) VALUES (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (2, 0);

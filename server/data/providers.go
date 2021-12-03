@@ -1,15 +1,15 @@
 package data
 
 import (
+	"SamuraiLab3/server/db"
 	"database/sql"
-	"log"
 	"net/http"
 
 	"github.com/google/wire"
 )
 
 func ProvideRepository(db *sql.DB) *Repository {
-	return &Repository{ Db: db }
+	return &Repository{Db: db}
 }
 
 func ProvideHttpHandler(repository *Repository) http.HandlerFunc {
@@ -17,13 +17,13 @@ func ProvideHttpHandler(repository *Repository) http.HandlerFunc {
 }
 
 func ProvideDbConnection() (*sql.DB, error) {
-	db, err := sql.Open("postgres", "postgres://postgres:postgres@localhost/forum?sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-		db.Close()
+	conn := &db.Connection{
+		DbName:     "forum",
+		User:       "postgres",
+		Host:       "localhost",
+		DisableSSL: true,
 	}
-	return db, err
-	// return nil, errors.New("DB: Not Implemented")
+	return conn.Open()
 }
 
 var Providers = wire.NewSet(ProvideRepository, ProvideHttpHandler, ProvideDbConnection)
