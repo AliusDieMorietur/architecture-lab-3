@@ -28,6 +28,8 @@ func (s *ForumApiServer) Start() error {
 		Handler: handler,
 	}
 
+	fmt.Printf("Listen port on: http://localhost:%d", s.Port)
+
 	return s.server.ListenAndServe()
 }
 
